@@ -31,7 +31,7 @@ from skimage.util import img_as_ubyte
 # Loading data, and defining model folder
 ####################################################
 
-def analyze_videos(config,videos,videotype='avi',shuffle=1,trainingsetindex=0,gputouse=None,save_as_csv=False, destfolder=None, videoReader=None):
+def analyze_videos(config,videos,videotype='avi',shuffle=1,trainingsetindex=0,gputouse=None,save_as_csv=False, destfolder=None, videoReader=None, overwrite=False):
     """
     Makes prediction based on a trained network. The index of the trained network is specified by parameters in the config file (in particular the variable 'snapshotindex')
     
@@ -151,7 +151,7 @@ def analyze_videos(config,videos,videotype='avi',shuffle=1,trainingsetindex=0,gp
     if len(Videos)>0:
         #looping over videos
         for video in Videos:
-            AnalyzeVideo(video,DLCscorer,trainFraction,cfg,dlc_cfg,sess,inputs, outputs,pdindex,save_as_csv, destfolder, videoReader = videoReader)
+            AnalyzeVideo(video,DLCscorer,trainFraction,cfg,dlc_cfg,sess,inputs, outputs,pdindex,save_as_csv, destfolder, videoReader = videoReader, overwrite=overwrite)
     
     os.chdir(str(start_path))
     print("The videos are analyzed. Now your research can truly start! \n You can create labeled videos with 'create_labeled_video'.")
@@ -252,7 +252,7 @@ def GetPoseS(cfg,dlc_cfg, sess, inputs, outputs,cap,nframes):
     return PredicteData,nframes
 
 
-def AnalyzeVideo(video,DLCscorer,trainFraction,cfg,dlc_cfg,sess,inputs, outputs,pdindex,save_as_csv, destfolder=None, videoReader=None):
+def AnalyzeVideo(video,DLCscorer,trainFraction,cfg,dlc_cfg,sess,inputs, outputs,pdindex,save_as_csv, destfolder=None, videoReader=None, overwrite=False):
     ''' Helper function for analyzing a video '''
     print("Starting to analyze % ", video)
     vname = Path(video).stem
@@ -261,8 +261,11 @@ def AnalyzeVideo(video,DLCscorer,trainFraction,cfg,dlc_cfg,sess,inputs, outputs,
     dataname = os.path.join(destfolder,vname + DLCscorer + '.h5')
     try:
         # Attempt to load data...
-        pd.read_hdf(dataname)
-        print("Video already analyzed!", dataname)
+        if overwrite:
+            raise FileNotFoundError
+        else:
+            pd.read_hdf(dataname)
+            print("Video already analyzed!", dataname)
     except FileNotFoundError:
         print("Loading ", video)
         # If a Video Reader was specified, use it instead of OpenCV
