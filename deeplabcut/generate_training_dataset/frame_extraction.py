@@ -7,7 +7,7 @@ M Mathis, mackenzie@post.harvard.edu
 """
 
 
-def extract_frames(config,mode='automatic',algo='kmeans',crop=False,userfeedback=True,cluster_step=1,cluster_resizewidth=30,cluster_color=False,opencv=True):
+def extract_frames(config,mode='automatic',algo='kmeans',crop=False,userfeedback=True,cluster_step=1,cluster_resizewidth=30,cluster_color=False,opencv=True, videoReader = None):
     """
     Extracts frames from the videos in the config.yaml file. Only the videos in the config.yaml will be used to select the frames.\n
     Use the function ``add_new_video`` at any stage of the project to add new videos to the config file and extract their frames.
@@ -88,6 +88,10 @@ def extract_frames(config,mode='automatic',algo='kmeans',crop=False,userfeedback
     from deeplabcut.utils import auxiliaryfunctions
     from matplotlib.widgets import RectangleSelector
 
+    # Use the OpenCV interface for the custom reader
+    if videoReader is not None:
+        opencv = True
+
     if mode == "manual":
         wd = Path(config).resolve().parents[0]
         os.chdir(str(wd))
@@ -128,7 +132,12 @@ def extract_frames(config,mode='automatic',algo='kmeans',crop=False,userfeedback
                 
             if askuser=='y' or askuser=='yes' or askuser=='Ja' or askuser=='ha': # multilanguage support :)
                 #indexlength = int(np.ceil(np.log10(clip.duration * clip.fps)))
-                if opencv:
+                if videoReader is not None:
+                    cap = videoReader(video)
+                    fps = cap.get(5)
+                    nframes = int(cap.get(7))
+                    duration = nframes * 1. / fps
+                elif opencv:
                     cap=cv2.VideoCapture(video)
                     fps = cap.get(5) #https://docs.opencv.org/2.4/modules/highgui/doc/reading_and_writing_images_and_video.html#videocapture-get
                     nframes = int(cap.get(7))

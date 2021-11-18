@@ -15,7 +15,7 @@ import cv2
 from deeplabcut import DEBUG
 import shutil
 
-def create_new_project(project, experimenter, videos, working_directory=None, copy_videos=False,videotype='.avi'):
+def create_new_project(project, experimenter, videos, working_directory=None, copy_videos=False,videotype='.avi', videoReader = None):
     """Creates a new project directory, sub-directories and a basic configuration file. The configuration file is loaded with the default values. Change its parameters to your projects need.
 
     Parameters
@@ -134,7 +134,10 @@ def create_new_project(project, experimenter, videos, working_directory=None, co
         except:
            rel_video_path = os.readlink(str(video))
 
-        vcap = cv2.VideoCapture(rel_video_path)
+        if videoReader is not None:
+            vcap = videoReader(rel_video_path)
+        else:
+            vcap = cv2.VideoCapture(rel_video_path)
         if vcap.isOpened():
            width = int(vcap.get(cv2.CAP_PROP_FRAME_WIDTH))
            height = int(vcap.get(cv2.CAP_PROP_FRAME_HEIGHT))
