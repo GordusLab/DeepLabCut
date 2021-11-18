@@ -1,32 +1,23 @@
 """
-DeepLabCut2.0 Toolbox
+DeepLabCut2.0 Toolbox (deeplabcut.org)
+© A. & M. Mathis Labs
 https://github.com/AlexEMG/DeepLabCut
-A Mathis, alexander.mathis@bethgelab.org
-T Nath, nath@rowland.harvard.edu
-M Mathis, mackenzie@post.harvard.edu
+Please see AUTHORS for contributors.
 
-The feature detectors in DeepLabCut are based of DeeperCut.
-Our toolbox provides an interface to DeeperCut by Eldar Insafutdinov et al.
-https://github.com/eldar/pose-tensorflow
-
-pose_estimation_tensorflow is based of Eldar's repository.
+https://github.com/AlexEMG/DeepLabCut/blob/master/AUTHORS
+Licensed under GNU Lesser General Public License v3.0
 """
 
-from deeplabcut.pose_estimation_tensorflow.dataset import *
-from deeplabcut.pose_estimation_tensorflow.models import *
-from deeplabcut.pose_estimation_tensorflow.nnet import *
-from deeplabcut.pose_estimation_tensorflow.util import *
-
 from deeplabcut.pose_estimation_tensorflow.config import *
+from deeplabcut.pose_estimation_tensorflow.datasets import *
 from deeplabcut.pose_estimation_tensorflow.default_config import *
-from deeplabcut.pose_estimation_tensorflow.evaluate import *
+from deeplabcut.pose_estimation_tensorflow.core.evaluate import *
+from deeplabcut.pose_estimation_tensorflow.core.train import *
+from deeplabcut.pose_estimation_tensorflow.core.test import *
+from deeplabcut.pose_estimation_tensorflow.export import export_model
+from deeplabcut.pose_estimation_tensorflow.models import *
+from deeplabcut.pose_estimation_tensorflow.nnets import *
 from deeplabcut.pose_estimation_tensorflow.predict_videos import *
-from deeplabcut.pose_estimation_tensorflow.test import *
-from deeplabcut.pose_estimation_tensorflow.train import *
 from deeplabcut.pose_estimation_tensorflow.training import *
-
-import os
-if os.environ.get('DLClight', default=False) == 'True':
-    pass
-else:
-    from deeplabcut.pose_estimation_tensorflow.vis_dataset import *
+from deeplabcut.pose_estimation_tensorflow.util import *
+from deeplabcut.pose_estimation_tensorflow.visualizemaps import *
