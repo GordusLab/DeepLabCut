@@ -13,7 +13,7 @@ from numpy import concatenate as cat
 
 import scipy.io as sio
 from scipy.misc import imread, imresize
-import cv2
+from motmot.SpiderMovie import SpiderMovie
 
 class Batch(Enum):
     inputs = 0
@@ -207,12 +207,11 @@ class PoseDataset:
         
         #print(im_file, os.getcwd())
         #print(self.cfg.project_path)
-        if '.ufmf' in im_file:
-            vid_name = im_file.split('ufmf/')[0]+'ufmf'
-            n_frame = int(im_file.split('ufmf/')[1])
-            cap = cv2.VideoCapture(vid_name)  ## put video name
-            cap.set(cv2.CAP_PROP_POS_FRAMES, n_frame)
-            res, image = cap.read()
+        if '.fmf' in im_file:
+            vid_name = im_file.split('.fmf/')[0]+'.fmf'
+            n_frame = int(im_file.split('.fmf/')[1])
+            mov = SpiderMovie(vid_name)  ## put video name
+            image = mov[n_frame]
         else:
             image = imread(os.path.join(self.cfg.project_path, im_file), mode='RGB')
 
