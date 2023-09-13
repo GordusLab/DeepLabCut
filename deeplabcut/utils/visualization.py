@@ -10,6 +10,7 @@ import numpy as np
 import matplotlib as mpl
 import platform
 from pathlib import Path
+from motmot.SpiderMovie import SpiderMovie
 
 if os.environ.get('DLClight', default=False) == 'True':
     mpl.use('AGG') #anti-grain geometry engine #https://matplotlib.org/faq/usage_faq.html
@@ -33,7 +34,14 @@ def MakeLabeledImage(DataCombined,imagenr,pcutoff,imagebasefolder,Scorers,bodypa
     dotsize=cfg['dotsize'] #=15
 
     plt.axis('off')
-    im=io.imread(os.path.join(imagebasefolder,DataCombined.index[imagenr]))
+    temp_filename = os.path.join(imagebasefolder,DataCombined.index[imagenr])
+    if '.fmf' in temp_filename:
+        vid_name = temp_filename.split('.fmf/')[0] + '.fmf'
+        n_frame = int(temp_filename.split('.fmf/')[1])
+        mov = SpiderMovie(vid_name)  ## put video name
+        im = mov[n_frame]
+    else:
+        im=io.imread(temp_filename)
     if np.ndim(im)>2: #color image!
         h,w,numcolors=np.shape(im)
     else:
