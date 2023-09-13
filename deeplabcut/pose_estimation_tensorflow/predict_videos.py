@@ -26,7 +26,7 @@ import tensorflow as tf
 from deeplabcut.utils import auxiliaryfunctions
 import cv2
 from skimage.util import img_as_ubyte
-
+from motmot.SpiderMovie import SpiderMovie
 ####################################################
 # Loading data, and defining model folder
 ####################################################
@@ -322,9 +322,23 @@ def GetPosesofFrames(cfg,dlc_cfg, sess, inputs, outputs,directory,framelist,nfra
     from skimage import io
     print("Starting to extract posture")
     if rgb:
-        im=io.imread(os.path.join(directory,framelist[0]),mode='RGB')
+        temp_filename = os.path.join(directory, framelist[0])
+        if '.fmf' in temp_filename:
+            vid_name = temp_filename.split('.fmf/')[0] + '.fmf'
+            n_frame = int(temp_filename.split('.fmf/')[1])
+            mov = SpiderMovie(vid_name)  ## put video name
+            im = mov[n_frame]
+        else:
+            im=io.imread(temp_filename,mode='RGB')
     else:
-        im=io.imread(os.path.join(directory,framelist[0]))
+        temp_filename = os.path.join(directory, framelist[0])
+        if '.fmf' in temp_filename:
+            vid_name = temp_filename.split('.fmf/')[0] + '.fmf'
+            n_frame = int(temp_filename.split('.fmf/')[1])
+            mov = SpiderMovie(vid_name)  ## put video name
+            im = mov[n_frame]
+        else:
+            im=io.imread(temp_filename)
     
     ny,nx,nc=np.shape(im)
     print("Overall # of frames: ", nframes," found with (before cropping) frame dimensions: ", nx,ny)
