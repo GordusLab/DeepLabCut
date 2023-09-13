@@ -23,7 +23,7 @@ from skimage import io
 import yaml
 from deeplabcut import DEBUG
 from deeplabcut.utils import auxiliaryfunctions, conversioncode
-
+from motmot.SpiderMovie import SpiderMovie
 #matplotlib.use('Agg')
 
 def comparevideolistsanddatafolders(config):
@@ -500,6 +500,7 @@ def create_training_dataset(config,num_shuffles=1,Shuffles=None,windows2linux=Fa
     import scipy.io as sio
     import deeplabcut
     import subprocess
+    import cv2
 
     # Loading metadata from config file:
     cfg = auxiliaryfunctions.read_config(config)
@@ -558,7 +559,14 @@ def create_training_dataset(config,num_shuffles=1,Shuffles=None,windows2linux=Fa
                 H = {}
                 # load image to get dimensions:
                 filename = Data.index[jj]
-                im = io.imread(os.path.join(cfg['project_path'],filename))
+                if '.fmf' in filename:
+                    vid_name = filename.split('.fmf/')[0] + '.fmf'
+                    n_frame = int(filename.split('.fmf/')[1])
+                    mov = SpiderMovie(vid_name)  ## put video name
+                    im = mov[n_frame]
+                else:
+
+                    im = io.imread(os.path.join(cfg['project_path'],filename))
                 H['image'] = filename
 
                 if np.ndim(im)==3:
