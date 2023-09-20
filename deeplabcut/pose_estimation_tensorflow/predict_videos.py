@@ -323,18 +323,18 @@ def GetPosesofFrames(cfg,dlc_cfg, sess, inputs, outputs,directory,framelist,nfra
     print("Starting to extract posture")
     if rgb:
         temp_filename = os.path.join(directory, framelist[0])
-        if '.fmf' in temp_filename:
-            vid_name = temp_filename.split('.fmf/')[0] + '.fmf'
-            n_frame = int(temp_filename.split('.fmf/')[1])
+        if '.ufmf' in temp_filename:
+            vid_name = temp_filename.split('.ufmf/')[0] + '.ufmf'
+            n_frame = int(temp_filename.split('.ufmf/')[1])
             mov = SpiderMovie(vid_name)  ## put video name
             im = mov[n_frame]
         else:
             im=io.imread(temp_filename,mode='RGB')
     else:
         temp_filename = os.path.join(directory, framelist[0])
-        if '.fmf' in temp_filename:
-            vid_name = temp_filename.split('.fmf/')[0] + '.fmf'
-            n_frame = int(temp_filename.split('.fmf/')[1])
+        if '.ufmf' in temp_filename:
+            vid_name = temp_filename.split('.ufmf/')[0] + '.ufmf'
+            n_frame = int(temp_filename.split('.ufmf/')[1])
             mov = SpiderMovie(vid_name)  ## put video name
             im = mov[n_frame]
         else:

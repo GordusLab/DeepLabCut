@@ -207,9 +207,9 @@ class PoseDataset:
         
         #print(im_file, os.getcwd())
         #print(self.cfg.project_path)
-        if '.fmf' in im_file:
-            vid_name = im_file.split('.fmf/')[0]+'.fmf'
-            n_frame = int(im_file.split('.fmf/')[1])
+        if '.ufmf' in im_file:
+            vid_name = im_file.split('.ufmf/')[0]+'.ufmf'
+            n_frame = int(im_file.split('.ufmf/')[1])
             mov = SpiderMovie(vid_name)  ## put video name
             image = mov[n_frame]
         else:
