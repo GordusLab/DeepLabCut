@@ -25,6 +25,7 @@ import matplotlib.colors as mcolors
 import matplotlib.patches as patches
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
 from matplotlib.widgets import RectangleSelector
+from motmot.SpiderMovie import SpiderMovie
 
 # ###########################################################################
 # Class for GUI MainFrame
@@ -54,7 +55,14 @@ class ImagePanel(wx.Panel):
         """
         Returns the colormaps ticks and . The order of ticks labels is reversed.
         """
-        im = io.imread(img)
+        if '.ufmf' in img:
+            vid_name = img.split('.ufmf/')[0] + '.ufmf'
+            n_frame = int(img.split('.ufmf/')[1])
+            mov = SpiderMovie(vid_name)  ## put video name
+            im = mov[n_frame]
+        else:
+            im = io.imread(img)
+
         norm = mcolors.Normalize(vmin=0, vmax=np.max(im))
         ticks = np.linspace(0,np.max(im),len(bodyparts))[::-1]
         return norm, ticks

@@ -16,6 +16,8 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm
 from pathlib import Path
+from motmot.SpiderMovie import SpiderMovie
+
 
 def pairwisedistances(DataCombined,scorer1,scorer2,pcutoff=-1,bodyparts=None):
     ''' Calculates the pairwise Euclidean distance metric over body parts vs. images'''
@@ -160,7 +162,13 @@ def evaluate_network(config,Shuffles=[1],plotting = None,show_errors = True,comp
                     PredicteData = np.zeros((Numimages,3 * len(dlc_cfg['all_joints_names'])))
                     print("Analyzing data...")
                     for imageindex, imagename in tqdm(enumerate(Data.index)):
-                        image = io.imread(os.path.join(cfg['project_path'],imagename),mode='RGB')
+                        if '.ufmf' in imagename:
+                            vid_name = imagename.split('.ufmf/')[0] + '.ufmf'
+                            n_frame = int(imagename.split('.ufmf/')[1])
+                            mov = SpiderMovie(os.path.join(cfg['project_path'], vid_name))  ## put video name
+                            image = mov[n_frame]
+                        else:
+                            image = io.imread(os.path.join(cfg['project_path'],imagename),mode='RGB')
                         image = skimage.color.gray2rgb(image)
                         image_batch = data_to_input(image)
                         

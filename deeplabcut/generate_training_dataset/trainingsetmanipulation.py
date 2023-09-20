@@ -26,6 +26,16 @@ from deeplabcut.utils import auxiliaryfunctions, conversioncode
 from motmot.SpiderMovie import SpiderMovie
 #matplotlib.use('Agg')
 
+
+
+
+
+# ======================================================================================================================
+# Action Class for Limb Tip Prediction
+# ======================================================================================================================
+
+
+
 def comparevideolistsanddatafolders(config):
     """
     Auxiliary function that compares the folders in labeled-data and the ones listed under video_sets (in the config file). 
@@ -253,7 +263,13 @@ def MakeLabeledPlots(folder,DataCombined,cfg,Labels,Colorscheme,cc,scale):
     tmpfolder = str(folder) + '_labeled'
     auxiliaryfunctions.attempttomakefolder(tmpfolder)
     for index, imagename in enumerate(DataCombined.index.values):
-        image = io.imread(os.path.join(cfg['project_path'],imagename))
+        if '.ufmf' in imagename:
+            vid_name = imagename.split('.ufmf/')[0] + '.ufmf'
+            n_frame = int(imagename.split('.ufmf/')[1])
+            mov = SpiderMovie(os.path.join(cfg['project_path'],vid_name))  ## put video name
+            image = mov[n_frame]
+        else:
+            image = io.imread(os.path.join(cfg['project_path'],imagename))
         plt.axis('off')
 
         if np.ndim(image)==2:
@@ -559,9 +575,9 @@ def create_training_dataset(config,num_shuffles=1,Shuffles=None,windows2linux=Fa
                 H = {}
                 # load image to get dimensions:
                 filename = Data.index[jj]
-                if '.fmf' in filename:
-                    vid_name = filename.split('.fmf/')[0] + '.fmf'
-                    n_frame = int(filename.split('.fmf/')[1])
+                if '.ufmf' in filename:
+                    vid_name = filename.split('.ufmf/')[0] + '.ufmf'
+                    n_frame = int(filename.split('.ufmf/')[1])
                     mov = SpiderMovie(vid_name)  ## put video name
                     im = mov[n_frame]
                 else:

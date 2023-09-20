@@ -26,6 +26,7 @@ from deeplabcut.generate_training_dataset import auxfun_drag_label
 from deeplabcut.utils import auxiliaryfunctions
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
 from matplotlib.backends.backend_wxagg import NavigationToolbar2WxAgg as NavigationToolbar
+from motmot.SpiderMovie import SpiderMovie
 
 # ###########################################################################
 # Class for GUI MainFrame
@@ -49,7 +50,13 @@ class ImagePanel(wx.Panel):
         return(self.figure)
 
     def drawplot(self,img,img_name,itr,index,bodyparts,cmap):
-        im = cv2.imread(img)
+        if '.ufmf' in img:
+            vid_name = img.split('.ufmf/')[0] + '.ufmf'
+            n_frame = int(img.split('.ufmf/')[1])
+            mov = SpiderMovie(vid_name)  ## put video name
+            im = mov[n_frame]
+        else:
+            im = cv2.imread(img)
         # convert the image to RGB as you are showing the image with matplotlib
         im = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
         ax = self.axes.imshow(im,cmap=cmap)
@@ -67,7 +74,13 @@ class ImagePanel(wx.Panel):
         """
         Returns the colormaps ticks and . The order of ticks labels is reversed.
         """
-        im = cv2.imread(img)
+        if '.ufmf' in img:
+            vid_name = img.split('.ufmf/')[0] + '.ufmf'
+            n_frame = int(img.split('.ufmf/')[1])
+            mov = SpiderMovie(vid_name)  ## put video name
+            im = mov[n_frame]
+        else:
+            im = cv2.imread(img)
         norm = mcolors.Normalize(vmin=0, vmax=np.max(im))
         ticks = np.linspace(0,np.max(im),len(bodyparts))[::-1]
         return norm, ticks

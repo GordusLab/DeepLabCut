@@ -32,7 +32,7 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 from matplotlib.backends.backend_wxagg import NavigationToolbar2WxAgg as NavigationToolbar
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
-
+from motmot.SpiderMovie import SpiderMovie
 
 # ###########################################################################
 # Class for GUI MainFrame
@@ -56,7 +56,13 @@ class ImagePanel(wx.Panel):
         return(self.figure)
 
     def drawplot(self,img,img_name,itr,index,threshold,bodyparts,cmap,preview):
-        im = io.imread(img)
+        if '.ufmf' in img:
+            vid_name = img.split('.ufmf/')[0] + '.ufmf'
+            n_frame = int(img.split('.ufmf/')[1])
+            mov = SpiderMovie(vid_name)  ## put video name
+            im = mov[n_frame]
+        else:
+            im = io.imread(img)
         ax = self.axes.imshow(im,cmap=cmap)
         divider = make_axes_locatable(self.axes)
         colorIndex = np.linspace(np.min(im),np.max(im),len(bodyparts))
@@ -75,7 +81,13 @@ class ImagePanel(wx.Panel):
         """
         Returns the colormaps ticks and . The order of ticks labels is reversed.
         """
-        im = io.imread(img)
+        if '.ufmf' in img:
+            vid_name = img.split('.ufmf/')[0] + '.ufmf'
+            n_frame = int(img.split('.ufmf/')[1])
+            mov = SpiderMovie(vid_name)  ## put video name
+            im = mov[n_frame]
+        else:
+            im = io.imread(img)
         norm = mcolors.Normalize(vmin=0, vmax=np.max(im))
         ticks = np.linspace(0,np.max(im),len(bodyparts))[::-1]
         return norm, ticks
@@ -427,8 +439,13 @@ class MainFrame(wx.Frame):
             self.axes.clear()
             self.figure.delaxes(self.figure.axes[1]) # Removes the axes corresponding to the colorbar
             self.figure,self.axes,self.canvas,self.toolbar = self.image_panel.drawplot(self.img,img_name,self.iter,self.index,self.threshold,self.bodyparts,self.colormap,self.preview)
-
-            im = io.imread(self.img)
+            if '.ufmf' in self.img:
+                vid_name = self.img.split('.ufmf/')[0] + '.ufmf'
+                n_frame = int(self.img.split('.ufmf/')[1])
+                mov = SpiderMovie(vid_name)  ## put video name
+                im = mov[n_frame]
+            else:
+                im = io.imread(self.img)
             if np.max(im) == 0:
                 msg = wx.MessageBox('Invalid image. Click Yes to remove', 'Error!', wx.YES_NO | wx.ICON_WARNING)
                 if msg == 2:
@@ -603,7 +620,13 @@ class MainFrame(wx.Frame):
         Plots and call auxfun_drag class for moving and removing points.
         """
         #small hack in case there are any 0 intensity images!
-        im = io.imread(im)
+        if '.ufmf' in im:
+            vid_name = im.split('.ufmf/')[0] + '.ufmf'
+            n_frame = int(im.split('.ufmf/')[1])
+            mov = SpiderMovie(vid_name)  ## put video name
+            im = mov[n_frame]
+        else:
+            im = io.imread(im)
         maxIntensity = np.max(im)
         if maxIntensity == 0:
             maxIntensity = np.max(im) + 255
