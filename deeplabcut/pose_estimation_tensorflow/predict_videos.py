@@ -31,6 +31,9 @@ from motmot.SpiderMovie import SpiderMovie
 # Loading data, and defining model folder
 ####################################################
 
+
+
+
 def analyze_videos(config,videos,videotype='avi',shuffle=1,trainingsetindex=0,gputouse=None,save_as_csv=False, destfolder=None, videoReader=None, overwrite=False):
     """
     Makes prediction based on a trained network. The index of the trained network is specified by parameters in the config file (in particular the variable 'snapshotindex')
