@@ -12,7 +12,8 @@ from numpy import array as arr
 from numpy import concatenate as cat
 
 import scipy.io as sio
-from scipy.misc import imread, imresize
+from skimage.io import imread
+from skimage.transform import resize as imresize
 from motmot.SpiderMovie import SpiderMovie
 
 class Batch(Enum):

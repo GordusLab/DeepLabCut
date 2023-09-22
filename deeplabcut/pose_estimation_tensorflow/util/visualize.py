@@ -5,7 +5,7 @@ https://github.com/eldar/pose-tensorflow
 
 import math, os
 import numpy as np
-from scipy.misc import imresize
+from skimage.transform import resize as imresize
 import matplotlib
 import platform
 if os.environ.get('DLClight', default=False) == 'True':
