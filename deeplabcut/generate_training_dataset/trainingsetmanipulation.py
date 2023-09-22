@@ -12,6 +12,7 @@ import numpy as np
 import pandas as pd
 import os.path
 import matplotlib as mpl
+import random
 if os.environ.get('DLClight', default=False) == 'True':
     mpl.use('AGG') #anti-grain geometry engine #https://matplotlib.org/faq/usage_faq.html
     pass
@@ -241,7 +242,7 @@ def check_labels(config,Labels = ['+','.','x'],scale = 1):
     """
     cfg = auxiliaryfunctions.read_config(config)
     videos = cfg['video_sets'].keys()
-    video_names = [Path(i).stem for i in videos]
+    video_names = [Path(i).stem+'.ufmf' for i in videos]
 
    #plotting parameters:
     cc = 0 # label index / here only 0, for human labeler
@@ -253,6 +254,8 @@ def check_labels(config,Labels = ['+','.','x'],scale = 1):
     for folder in folders:
         try:
             DataCombined = pd.read_hdf(os.path.join(str(folder),'CollectedData_' + cfg['scorer'] + '.h5'), 'df_with_missing')
+            rand_int = random.sample(range(len(DataCombined)), 25)
+            DataCombined = DataCombined.iloc[rand_int]
             MakeLabeledPlots(folder,DataCombined,cfg,Labels,Colorscheme,cc,scale)
         except FileNotFoundError:
             print("Attention:", folder, "does not appear to have labeled data!")
@@ -264,7 +267,7 @@ def MakeLabeledPlots(folder,DataCombined,cfg,Labels,Colorscheme,cc,scale):
     auxiliaryfunctions.attempttomakefolder(tmpfolder)
     for index, imagename in enumerate(DataCombined.index.values):
         if '.ufmf' in imagename:
-            vid_name = imagename.split('.ufmf/')[0] + '.ufmf'
+            vid_name = imagename.split('labeled-data/')[1].split('.ufmf/')[0] + '.ufmf'
             n_frame = int(imagename.split('.ufmf/')[1])
             mov = SpiderMovie(os.path.join(cfg['project_path'],vid_name))  ## put video name
             image = mov[n_frame]

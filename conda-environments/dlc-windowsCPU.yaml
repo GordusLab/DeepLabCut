@@ -12,5 +12,9 @@ dependencies:
   - tensorflow==1.12
   - wxpython
   - pytables==3.4.4 
+  - tqdm
+  - opencv
+  - statsmodels
+  - scikit-learn
   - pip:
     - deeplabcut

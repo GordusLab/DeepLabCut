@@ -90,11 +90,11 @@ def create_new_project(project, experimenter, videos, working_directory=None, co
 
     videos = [Path(vp) for vp in videos]
     dirs = [data_path/Path(i.stem) for i in videos]
-    for p in dirs:
-        """
-        Creates directory under data
-        """
-        p.mkdir(parents = True, exist_ok = True)
+    #for p in dirs:
+    #    """
+    #    Creates directory under data
+    #    """
+    #    p.mkdir(parents = True, exist_ok = True)
 
     destinations = [video_path.joinpath(vp.name) for vp in videos]
     if copy_videos==True:
