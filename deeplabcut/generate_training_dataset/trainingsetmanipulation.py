@@ -581,7 +581,7 @@ def create_training_dataset(config,num_shuffles=1,Shuffles=None,windows2linux=Fa
                 # load image to get dimensions:
                 filename = Data.index[jj]
                 if '.ufmf' in filename:
-                    vid_name = filename.split('labeled-data/')[1].split('.ufmf/')[0] + '.ufmf'
+                    vid_name = cfg['project_path'] + '/videos/' + filename.split('labeled-data/')[1].split('.ufmf/')[0] + '.ufmf'
                     n_frame = int(filename.split('.ufmf/')[1])
                     mov = SpiderMovie(vid_name)  ## put video name
                     im = mov[n_frame]
