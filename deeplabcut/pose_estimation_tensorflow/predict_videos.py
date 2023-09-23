@@ -327,7 +327,7 @@ def GetPosesofFrames(cfg,dlc_cfg, sess, inputs, outputs,directory,framelist,nfra
     if rgb:
         temp_filename = os.path.join(directory, framelist[0])
         if '.ufmf' in temp_filename:
-            vid_name = temp_filename.split('.ufmf/')[0] + '.ufmf'
+            vid_name = temp_filename.split('labeled-data/')[1].split('.ufmf/')[0] + '.ufmf'
             n_frame = int(temp_filename.split('.ufmf/')[1])
             mov = SpiderMovie(vid_name)  ## put video name
             im = mov[n_frame]
@@ -336,7 +336,7 @@ def GetPosesofFrames(cfg,dlc_cfg, sess, inputs, outputs,directory,framelist,nfra
     else:
         temp_filename = os.path.join(directory, framelist[0])
         if '.ufmf' in temp_filename:
-            vid_name = temp_filename.split('.ufmf/')[0] + '.ufmf'
+            vid_name = temp_filename.split('labeled-data/')[1].split('.ufmf/')[0] + '.ufmf'
             n_frame = int(temp_filename.split('.ufmf/')[1])
             mov = SpiderMovie(vid_name)  ## put video name
             im = mov[n_frame]

@@ -263,7 +263,7 @@ def create_labeled_video(config,videos,videotype='avi',shuffle=1,trainingsetinde
         os.chdir(str(videofolder))
         videotype = Path(video).suffix
         print("Starting % ", videofolder, videos)
-        vname = str(Path(video).stem)
+        vname = str(Path(video).stem+'.ufmf')
         if os.path.isfile(os.path.join(str(videofolder),vname + DLCscorer+'_labeled.mp4')):
             print("Labeled video already created.")
         else:

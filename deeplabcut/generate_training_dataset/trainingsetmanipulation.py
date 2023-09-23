@@ -49,7 +49,7 @@ def comparevideolistsanddatafolders(config):
     """
     cfg = auxiliaryfunctions.read_config(config)
     videos = cfg['video_sets'].keys()
-    video_names = [Path(i).stem for i in videos]
+    video_names = [Path(i).stem+'.ufmf' for i in videos]
 
     alldatafolders = [fn for fn in os.listdir(Path(config).parent / 'labeled-data') if '_labeled' not in fn]
 
@@ -91,7 +91,7 @@ def adddatasetstovideolistandviceversa(config,prefix,width,height,suffix='.mp4')
     """
     cfg = auxiliaryfunctions.read_config(config)
     videos = cfg['video_sets'].keys()
-    video_names = [Path(i).stem for i in videos]
+    video_names = [Path(i).stem+'.ufmf' for i in videos]
 
     alldatafolders = [fn for fn in os.listdir(Path(config).parent / 'labeled-data') if '_labeled' not in fn]
 
@@ -113,7 +113,7 @@ def adddatasetstovideolistandviceversa(config,prefix,width,height,suffix='.mp4')
 
     #Load updated lists:
     videos = cfg['video_sets'].keys()
-    video_names = [Path(i).stem for i in videos]
+    video_names = [Path(i).stem+'.ufmf' for i in videos]
 
     for vn in alldatafolders:
         if vn in video_names:
@@ -169,7 +169,7 @@ def dropannotationfileentriesduetodeletedimages(config):
     """
     cfg = auxiliaryfunctions.read_config(config)
     videos = cfg['video_sets'].keys()
-    video_names = [Path(i).stem for i in videos]
+    video_names = [Path(i).stem+'.ufmf' for i in videos]
     folders = [Path(config).parent / 'labeled-data' /Path(i) for i in video_names]
 
     for folder in folders:
@@ -351,7 +351,7 @@ def merge_annotateddatasets(cfg,project_path,trainingsetfolder_full,windows2linu
     AnnotationData=None
     data_path = Path(os.path.join(project_path , 'labeled-data'))
     videos = cfg['video_sets'].keys()
-    video_names = [Path(i).stem for i in videos]
+    video_names = [Path(i).stem+'.ufmf' for i in videos]
     for i in video_names:
         try:
             data = pd.read_hdf((str(data_path / Path(i))+'/CollectedData_'+cfg['scorer']+'.h5'),'df_with_missing')
@@ -474,7 +474,7 @@ def mergeandsplit(config,trainindex=0,uniform=True,windows2linux=False):
         trainIndexes, testIndexes = SplitTrials(range(len(Data.index)), trainFraction)
     else: #leave one folder out split
         videos = cfg['video_sets'].keys()
-        test_video_name = [Path(i).stem for i in videos][trainindex]
+        test_video_name = [Path(i).stem+'.ufmf' for i in videos][trainindex]
         print("Excluding the following folder (from training):", test_video_name)
         trainIndexes, testIndexes=[],[]
         for index,name in enumerate(Data.index):
@@ -581,7 +581,7 @@ def create_training_dataset(config,num_shuffles=1,Shuffles=None,windows2linux=Fa
                 # load image to get dimensions:
                 filename = Data.index[jj]
                 if '.ufmf' in filename:
-                    vid_name = filename.split('.ufmf/')[0] + '.ufmf'
+                    vid_name = filename.split('labeled-data/')[1].split('.ufmf/')[0] + '.ufmf'
                     n_frame = int(filename.split('.ufmf/')[1])
                     mov = SpiderMovie(vid_name)  ## put video name
                     im = mov[n_frame]
