@@ -139,7 +139,7 @@ def dropduplicatesinannotatinfiles(config):
     """
     cfg = auxiliaryfunctions.read_config(config)
     videos = cfg['video_sets'].keys()
-    video_names = [Path(i).stem for i in videos]
+    video_names = [Path(i).stem+'.ufmf' for i in videos]
     folders = [Path(config).parent / 'labeled-data' /Path(i) for i in video_names]
 
     for folder in folders:
@@ -218,7 +218,7 @@ def get_cmap(n, name='jet'):
     RGB color; the keyword argument name must be a standard mpl colormap name.'''
     return plt.cm.get_cmap(name, n)
 
-def check_labels(config,Labels = ['+','.','x'],scale = 1):
+def check_labels(config,Labels = ['+','.','x'],scale = 1, basepath=None):
     """
     Double check if the labels were at correct locations and stored in a proper file format.\n
     This creates a new subdirectory for each video under the 'labeled-data' and all the frames are plotted with the labels.\n
@@ -256,26 +256,27 @@ def check_labels(config,Labels = ['+','.','x'],scale = 1):
             DataCombined = pd.read_hdf(os.path.join(str(folder),'CollectedData_' + cfg['scorer'] + '.h5'), 'df_with_missing')
             rand_int = random.sample(range(len(DataCombined)), 25)
             DataCombined = DataCombined.iloc[rand_int]
-            MakeLabeledPlots(folder,DataCombined,cfg,Labels,Colorscheme,cc,scale)
+            MakeLabeledPlots(folder,DataCombined,cfg,Labels,Colorscheme,cc,scale, basepath)
         except FileNotFoundError:
             print("Attention:", folder, "does not appear to have labeled data!")
 
     print("If all the labels are ok, then use the function 'create_training_dataset' to create the training dataset!")
 
-def MakeLabeledPlots(folder,DataCombined,cfg,Labels,Colorscheme,cc,scale):
+
+def MakeLabeledPlots(folder, DataCombined, cfg, Labels, Colorscheme, cc, scale, basepath=None):
     tmpfolder = str(folder) + '_labeled'
     auxiliaryfunctions.attempttomakefolder(tmpfolder)
     for index, imagename in enumerate(DataCombined.index.values):
         if '.ufmf' in imagename:
             vid_name = imagename.split('labeled-data/')[1].split('.ufmf/')[0] + '.ufmf'
             n_frame = int(imagename.split('.ufmf/')[1])
-            mov = SpiderMovie(os.path.join(cfg['project_path'],vid_name))  ## put video name
+            mov = SpiderMovie(os.path.join(basepath, 'raw', vid_name))  ## put video name
             image = mov[n_frame]
         else:
-            image = io.imread(os.path.join(cfg['project_path'],imagename))
+            image = io.imread(os.path.join(cfg['project_path'], imagename))
         plt.axis('off')
 
-        if np.ndim(image)==2:
+        if np.ndim(image) == 2:
             h, w = np.shape(image)
         else:
             h, w, nc = np.shape(image)
@@ -286,8 +287,8 @@ def MakeLabeledPlots(folder,DataCombined,cfg,Labels,Colorscheme,cc,scale):
             left=0, bottom=0, right=1, top=1, wspace=0, hspace=0)
 
         plt.imshow(image, 'gray')
-        if index==0:
-            print("They are stored in the following folder: %s." %tmpfolder) #folder)
+        if index == 0:
+            print("They are stored in the following folder: %s." % tmpfolder)  # folder)
 
         for c, bp in enumerate(cfg['bodyparts']):
             plt.plot(
@@ -305,9 +306,10 @@ def MakeLabeledPlots(folder,DataCombined,cfg,Labels,Colorscheme,cc,scale):
             left=0, bottom=0, right=1, top=1, wspace=0, hspace=0)
         plt.gca().invert_yaxis()
 
-        plt.savefig(str(Path(tmpfolder)/imagename.split(os.sep)[-1])) #create file name
+        plt.savefig(str(Path(tmpfolder)) + imagename.split('.ufmf')[-1])  # create file name
         plt.close("all")
-    
+
+
 def boxitintoacell(joints):
     ''' Auxiliary function for creating matfile.'''
     outer = np.array([[None]], dtype=object)
