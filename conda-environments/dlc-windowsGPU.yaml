@@ -7,10 +7,9 @@
 #
 # install: conda env create -f dlc-windowsGPU.yaml 
 # update:  conda env update -f dlc-windowsGPU.yaml 
-name: dlc-windowsGPU
+name: dlc-windowsGPU-trainvideo
 dependencies:
   - python=3.6
-  - msvc_runtime
   - tensorflow-gpu==1.12
   - cudnn=7
   - wxpython
