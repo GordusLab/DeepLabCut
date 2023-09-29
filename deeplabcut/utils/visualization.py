@@ -37,8 +37,9 @@ def MakeLabeledImage(DataCombined,imagenr,pcutoff,imagebasefolder,Scorers,bodypa
     temp_filename = os.path.join(imagebasefolder,DataCombined.index[imagenr])
     if '.ufmf' in temp_filename:
         vid_name = temp_filename.split('labeled-data/')[1].split('.ufmf/')[0] + '.ufmf'
+        vid_name = 'videos/' + vid_name
         n_frame = int(temp_filename.split('.ufmf/')[1])
-        mov = SpiderMovie(vid_name)  ## put video name
+        mov = SpiderMovie(os.path.join(cfg['project_path'], vid_name))  ## put video name
         im = mov[n_frame]
     else:
         im=io.imread(temp_filename)

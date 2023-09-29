@@ -163,7 +163,8 @@ def evaluate_network(config,Shuffles=[1],plotting = None,show_errors = True,comp
                     print("Analyzing data...")
                     for imageindex, imagename in tqdm(enumerate(Data.index)):
                         if '.ufmf' in imagename:
-                            vid_name = imagename.split('.ufmf/')[0] + '.ufmf'
+                            vid_name = imagename.split('labeled-data/')[1].split('.ufmf/')[0] + '.ufmf'
+                            vid_name = 'videos/' + vid_name
                             n_frame = int(imagename.split('.ufmf/')[1])
                             mov = SpiderMovie(os.path.join(cfg['project_path'], vid_name))  ## put video name
                             image = mov[n_frame]
