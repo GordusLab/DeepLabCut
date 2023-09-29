@@ -258,7 +258,10 @@ def GetPoseS(cfg,dlc_cfg, sess, inputs, outputs,cap,nframes):
 def AnalyzeVideo(video,DLCscorer,trainFraction,cfg,dlc_cfg,sess,inputs, outputs,pdindex,save_as_csv, destfolder=None, videoReader=None, overwrite=False):
     ''' Helper function for analyzing a video '''
     print("Starting to analyze % ", video)
-    vname = Path(video).stem
+    if '.ufmf' in video:
+        vname = Path(video).stem+'.ufmf'
+    else:
+        vname = Path(video).stem
     if destfolder is None:
         destfolder = str(Path(video).parents[0])
     dataname = os.path.join(destfolder,vname + DLCscorer + '.h5')
