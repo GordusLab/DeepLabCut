@@ -54,5 +54,5 @@ from deeplabcut.pose_estimation_tensorflow import train_network
 from deeplabcut.pose_estimation_tensorflow import evaluate_network
 from deeplabcut.pose_estimation_tensorflow import analyze_videos, analyze_time_lapse_frames
 
-from deeplabcut.utils import create_labeled_video,plot_trajectories, auxiliaryfunctions, convertcsv2h5, analyze_videos_converth5_to_csv
+from deeplabcut.utils import create_labeled_video,create_labeled_ufmfvideo,plot_trajectories, auxiliaryfunctions, convertcsv2h5, analyze_videos_converth5_to_csv
 from deeplabcut.version import __version__, VERSION
