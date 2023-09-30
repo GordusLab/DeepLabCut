@@ -307,7 +307,7 @@ def create_labeled_video(config,videos,videotype='avi',shuffle=1,trainingsetinde
                         CreateVideo(clip,Dataframe,cfg["pcutoff"],cfg["dotsize"],cfg["colormap"],DLCscorer,bodyparts,cropping,x1,x2,y1,y2) #NEED TO ADD CROPPING!
 
 
-def create_video_fromufmf(cfg,dataname, vname=None, framestart =0, frameend =3000, pcutoff=0.5,dotsize=12, colormap='rainbow', bodyparts2plot=None):
+def create_video_fromufmf(cfg,Dataframe,DLCscorer, dataname, vname=None, framestart =0, frameend =3000, pcutoff=0.5,dotsize=12, colormap='rainbow', bodyparts2plot=None):
     import cv2
 
     colorclass = plt.cm.ScalarMappable(cmap=colormap)
@@ -463,7 +463,7 @@ def create_labeled_ufmfvideo(config, videos, videotype='ufmf', shuffle=1, traini
                 #                     outputframerate, Frames2plot)
 
 
-                create_video_fromufmf(cfg,dataname, vname=vname, framestart =0, frameend =3000, pcutoff=cfg['pcutoff'],dotsize=cfg['dotsize'], colormap=cfg['colormap'], bodyparts2plot=bodyparts)
+                create_video_fromufmf(cfg,Dataframe,DLCscorer,dataname, vname=vname, framestart =0, frameend =3000, pcutoff=cfg['pcutoff'],dotsize=cfg['dotsize'], colormap=cfg['colormap'], bodyparts2plot=bodyparts)
 
 
 if __name__ == '__main__':
